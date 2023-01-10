@@ -47,7 +47,7 @@ networking:
   - {{ network }}
 {% endfor %}
 platform:
-{% if sno|default(False) %}
+{% if sno|default(False) or (masters == 1 and workers == 0) %}
   none: {}
 {% else %}
   baremetal:
