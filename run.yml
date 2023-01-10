@@ -54,10 +54,12 @@
       creates: billi/agent.x86_64.iso
   - name: Download redfish helper lib
     ansible.builtin.get_url:
-      url: https://raw.githubusercontent.com/karmab/kcli/master/kvirt/redfish/__init__.py
+      url: https://raw.githubusercontent.com/karmab/kcli/main/kvirt/kfish/__init__.py
       dest: ./redfish.py
   - name: Copy agent.x86_64.iso to /var/www/html
-    command: cp billi/agent.x86_64.iso /var/www/html
+    command: sudo cp billi/agent.x86_64.iso /var/www/html
+  - name: Make agent.x86_64.iso available
+    command: sudo chown apache.apache /var/www/html/billi/agent.x86_64.iso
   - name: Boot hosts with iso
     ansible.builtin.command:
       cmd: ./boot.py {{ ansible_inventory_sources[0] }}
