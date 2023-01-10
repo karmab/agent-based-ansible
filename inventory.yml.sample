@@ -35,7 +35,7 @@ all:
       bmc_url: bmc_url: http://192.168.122.1:9000/redfish/v1/Systems/local/billi-node-2
     cluster: billi
     domain: karmalabs.corp
-    masters: 3
+    ctlplanes: 3
     workers: 0
     api_vip: 192.168.128.253
     ingress_vip: 192.168.128.252
