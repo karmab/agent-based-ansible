@@ -3,6 +3,7 @@
 from redfish import Redfish
 import sys
 import yaml
+import socket
 
 inventory = sys.argv[1] if len(sys.argv) > 1 else 'inventory'
 with open(inventory) as f:
@@ -12,7 +13,12 @@ with open(inventory) as f:
 default_bmc_user = data.get('bmc_user', 'root')
 default_bmc_password = data.get('bmc_password', 'calvin')
 default_bmc_model = data.get('bmc_model', 'dell')
-iso_url = data['iso_url']
+
+iso_url = data.get('iso_url')
+if not iso_url:
+    ipaddr = socket.gethostbyname(socket.gethostname())
+    iso_url = f"http://{ipaddr}/agent.x86_64.iso"
+
 hosts = data['hosts']
 for host in hosts:
     bmc_url = host.get('bmc_url')
