@@ -10,19 +10,22 @@ all:
       - ip: 192.168.128.11
         netmask: 24
         gateway: 192.168.128.1
-      mac: de:ad:bb:ef:00:21
+      mac: cc:aa:aa:aa:dd:01
+      nic: enp1s0
       bmc_url: http://192.168.122.1:9000/redfish/v1/Systems/local/billi-node-0
     - addresses:
       - ip: 192.168.128.12
         netmask: 24
         gateway: 192.168.128.1
-      mac: de:ad:bb:ef:00:22
+      mac: cc:aa:aa:aa:dd:02
+      nic: enp1s0
       bmc_url: http://192.168.122.1:9000/redfish/v1/Systems/local/billi-node-1
     - addresses:
       - ip: 192.168.128.13
         netmask: 24
         gateway: 192.168.128.1
-      mac: de:ad:bb:ef:00:23
+      mac: cc:aa:aa:aa:dd:03
+      nic: enp1s0
       bmc_url: http://192.168.122.1:9000/redfish/v1/Systems/local/billi-node-2
     cluster: billi
     domain: karmalabs.corp

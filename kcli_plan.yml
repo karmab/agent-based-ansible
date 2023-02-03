@@ -23,5 +23,5 @@ billi:
  - {{ disk_size }}
  nets:
  - name: {{ network }}
-   mac: de:ad:bb:ef:00:{{ 21 + num }}
+   mac: cc:aa:aa:aa:dd:{{ 1 + num }}
 {% endfor %}

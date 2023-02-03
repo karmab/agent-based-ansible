@@ -11,14 +11,6 @@ on:
         description: 'Cluster Name'
         required: true
         default: billi
-      NODES:
-        description: 'Nodes'
-        required: true
-        default: 3
-      MACPREFIX:
-        description: 'Mac prefix'
-        required: true
-        default: 'de:ad:bb:ef:00:21'
       PULLSECRET:
         description: 'Pull Secret'
         required: true
@@ -33,11 +25,8 @@ env:
  PYTHONUNBUFFERED: true
  CLIENT: ${{github.event.inputs.CLIENT}}
  CLUSTER: ${{github.event.inputs.CLUSTER}}
- NODES: ${{github.event.inputs.NODES}}
- MACPREFIX: ${{github.event.inputs.MACPREFIX}}
  PULLSECRET: ${{github.event.inputs.PULLSECRET}}
  INVENTORY: ${{github.event.inputs.INVENTORY}}
-# PULLSECRET: /root/openshift_pull.json
 
 jobs:
     requirements:
