@@ -1,0 +1,72 @@
+name: deploy-cluster
+
+on:
+  workflow_dispatch:
+    inputs:
+      CLIENT:
+        description: 'Client name'
+        required: true
+        default: 'local'
+      CLUSTER:
+        description: 'Cluster Name'
+        required: true
+        default: billi
+      NODES:
+        description: 'Nodes'
+        required: true
+        default: 3
+      MACPREFIX:
+        description: 'Mac prefix'
+        required: true
+        default: 'de:ad:bb:ef:00:21'
+      PULLSECRET:
+        description: 'Pull Secret'
+        required: true
+        default: /root/openshift_pull.json
+      INVENTORY:
+        description: 'inventory'
+        required: true
+        default: .github/inventory_ci.yml
+
+env:
+ HOME: /root
+ PYTHONUNBUFFERED: true
+ CLIENT: ${{github.event.inputs.CLIENT}}
+ CLUSTER: ${{github.event.inputs.CLUSTER}}
+ NODES: ${{github.event.inputs.NODES}}
+ MACPREFIX: ${{github.event.inputs.MACPREFIX}}
+ PULLSECRET: ${{github.event.inputs.PULLSECRET}}
+ INVENTORY: ${{github.event.inputs.INVENTORY}}
+# PULLSECRET: /root/openshift_pull.json
+
+jobs:
+    requirements:
+      runs-on: libvirt
+      steps:
+       - uses: actions/checkout@v2
+       - run: git pull origin ${GITHUB_REF##*/}
+       - name: Install ansible
+         run: which ansible-playbook || yum -y install ansible
+       - name: Install kcli
+         run: |
+           curl https://raw.githubusercontent.com/karmab/kcli/master/install.sh | bash
+           kcli create sushy-service
+       - name: Clean up
+         continue-on-error: true
+         run: |
+           kcli -C $CLIENT delete plan --yes $CLUSTER || true
+
+    deploy-kcli-plan:
+      needs: requirements
+      runs-on: libvirt
+      steps:
+      - name: Deploy kcli plan
+        run: |
+          kcli -C $CLIENT create plan $CLUSTER
+
+    deploy-billi-cluster:
+      needs: deploy-kcli-plan
+      runs-on: libvirt
+      steps:
+      - name: Deploy billi cluster
+        run: ansible-playbook -i $INVENTORY run.yml

@@ -28,7 +28,7 @@ controlPlane:
   architecture: amd64
   hyperthreading: Enabled
   name: master
-  replicas: {{ 1 if sno|default(False) else ctplanes }}
+  replicas: {{ 1 if sno|default(False) else ctlplanes }}
 metadata:
   name: {{ cluster }}
 networking:

@@ -1,36 +1,27 @@
 all:
   vars:
     openshift_install_url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-4.12/openshift-install-linux.tar.gz
+    pull_secret: /root/openshift_pull.json
     iso_url: http://192.168.122.1/agent.x86_64.iso
     dns_resolver:
-      - 192.168.128.1
+    - 192.168.128.1
     hosts:
     - addresses:
       - ip: 192.168.128.11
         netmask: 24
         gateway: 192.168.128.1
-#      - ip: 2620:52:0:1303::21
-#        netmask: 64
-#        gateway: 2620:52:0:1303::1
       mac: de:ad:bb:ef:00:21
       bmc_url: http://192.168.122.1:9000/redfish/v1/Systems/local/billi-node-0
-#     disk: vdd
     - addresses:
       - ip: 192.168.128.12
         netmask: 24
         gateway: 192.168.128.1
-#      - ip: 2620:52:0:1303::22
-#        netmask: 64
-#        gateway: 2620:52:0:1303::1
       mac: de:ad:bb:ef:00:22
       bmc_url: http://192.168.122.1:9000/redfish/v1/Systems/local/billi-node-1
     - addresses:
       - ip: 192.168.128.13
         netmask: 24
         gateway: 192.168.128.1
-#      - ip: 2620:52:0:1303::23
-#        netmask: 64
-#        gateway: 2620:52:0:1303::1
       mac: de:ad:bb:ef:00:23
       bmc_url: http://192.168.122.1:9000/redfish/v1/Systems/local/billi-node-2
     cluster: billi
@@ -39,4 +30,4 @@ all:
     workers: 0
     api_vip: 192.168.128.253
     ingress_vip: 192.168.128.252
-    ssh_key: 'CHANGEME'
+    ssh_key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDlaOm3m4qhTk+4cPUTpuaF6Vx89cX5Gk+geytYolgWBWZI32nNu//uq62EqupDJTgSwW4zIhwmjtUoTKqaQLysIly2P+30bvCW/V8PnYIIztMrgrYphpBNzAkihF9HcB0j3lU1fQkk6JwTIuLARlVp5YK7URcTcC8S50CvUWPQHKEOygYF0z+d07ufy7rjtQ7eehYduUNkH6ybphGSV/Iy/LOA2itI24B2+xG2cNkeslgD56MmRpV0gJZIc6oo54VhrjTtIQWF9WvsdVJgzJjxA1GkvY5iZADxgJa7qZ+jlcS7yQ1tQBXhilzCvkn4P0om6nlUrUEFUsr2VXn952h root@u08.dev5.kni.lab.eng.bos.redhat.com'
