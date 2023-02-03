@@ -1,32 +1,16 @@
-name: DEPLOY-CLUSTER
+name: NIGHTLY-CI
 
 on:
-  workflow_dispatch:
-    inputs:
-      CLIENT:
-        description: 'Client name'
-        required: true
-        default: 'local'
-      CLUSTER:
-        description: 'Cluster Name'
-        required: true
-        default: billi
-      PULLSECRET:
-        description: 'Pull Secret'
-        required: true
-        default: /root/openshift_pull.json
-      INVENTORY:
-        description: 'inventory'
-        required: true
-        default: .github/inventory_ci.yml
+   schedule:
+    - cron: '31 23 * * *'
 
 env:
  HOME: /root
  PYTHONUNBUFFERED: true
- CLIENT: ${{github.event.inputs.CLIENT}}
- CLUSTER: ${{github.event.inputs.CLUSTER}}
- PULLSECRET: ${{github.event.inputs.PULLSECRET}}
- INVENTORY: ${{github.event.inputs.INVENTORY}}
+ CLIENT: local
+ CLUSTER: billi
+ PULLSECRET: /root/openshift_pull.json
+ INVENTORY: .github/inventory_ci.yml
 
 jobs:
     requirements:
