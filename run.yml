@@ -36,12 +36,16 @@
       src: manifests
       dest: billi
     when: '"manifests" is directory'
+  - name: Template get_installer.sh.j2
+    template:
+      src: get_installer.sh.j2
+      dest: get_installer.sh
+    when: disconnected_url is not defined
   - name: Grab openshift-install from internet
-    ansible.builtin.unarchive:
-      src: "{{ openshift_install_url }}"
-      dest: "."
-      remote_src: true
+    ansible.builtin.command:
+      cmd: bash get_installer.sh
       creates: openshift-install
+#  - meta: end_play
     when: disconnected_url is not defined
   - name: Grab openshift-install from disconnected registry
     ansible.builtin.command:

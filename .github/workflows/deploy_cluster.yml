@@ -19,6 +19,14 @@ on:
         description: 'inventory'
         required: true
         default: .github/inventory_ci.yml
+      VERSION:
+        description: 'version'
+        required: false
+        default: stable
+      TAG:
+        description: 'tag'
+        required: false
+        default: "4.12"
 
 env:
  HOME: /root
@@ -27,6 +35,8 @@ env:
  CLUSTER: ${{github.event.inputs.CLUSTER}}
  PULLSECRET: ${{github.event.inputs.PULLSECRET}}
  INVENTORY: ${{github.event.inputs.INVENTORY}}
+ VERSION: ${{github.event.inputs.VERSION}}
+ TAG: ${{github.event.inputs.TAG}}
 
 jobs:
     requirements:
@@ -61,4 +71,4 @@ jobs:
       - name: Deploy billi cluster
         run: |
           grep -q "^192.168.128.253 api.billi.karmalabs.corp" /etc/hosts || echo 192.168.128.253 api.billi.karmalabs.corp >> /etc/hosts
-          ansible-playbook -i $INVENTORY run.yml
+          ansible-playbook -i $INVENTORY run.yml -e version=$VERSION -e tag=$TAG

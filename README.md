@@ -29,6 +29,8 @@ Code to launch nodes using redfish is included
 |api_vip             |None                |
 |ingress_vip         |None                |
 |machine_networks    |[]                  |
+|version             |stable              |
+|tag                 |4.12                |
 
 ## Emulating baremetal hosts with kcli
 
