@@ -2,7 +2,7 @@ all:
   vars:
     disconnected_url: 2620-52-0-1303--2573.sslip.io:5000
     # pull_secret_file: /root/openshift_pull.json
-    iso_url: http://192.168.122.1/agent.x86_64.iso
+    iso_url: http://192.168.122.1/billi.iso
     prefix: 64
     dns_resolver:
     - 2620:52:0:1303::1

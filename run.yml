@@ -56,23 +56,23 @@
     ansible.builtin.command:
       cmd: ./openshift-install agent create image --dir billi --log-level debug
       creates: billi/agent.x86_64.iso
-  - name: Remove old iso
+  - name: Remove old agent iso
     ansible.builtin.file:
-      path: /var/www/html/agent.x86_64.iso
+      path: /var/www/html/{{ cluster }}.iso
       state: absent
-  - name: Copy agent.x86_64.iso to /var/www/html
+  - name: Copy agent iso to /var/www/html
     become: yes
-    command: cp billi/agent.x86_64.iso /var/www/html
-  - name: Make agent.x86_64.iso available
+    command: cp billi/agent.x86_64.iso /var/www/html/{{ cluster }}.iso
+  - name: Make agent iso available
     become: yes
     file:
-      path: /var/www/html/agent.x86_64.iso
+      path: /var/www/html/{{ cluster }}.iso
       owner: apache
       group: apache
   - name: Boot hosts with iso
     ansible.builtin.command:
       cmd: "{{ playbook_dir }}/boot.py {{ ansible_inventory_sources[0] }}"
-  - name: Remove agent.x86_64.iso
+  - name: Remove agent iso
     ansible.builtin.file:
       path: billi/agent.x86_64.iso
       state: absent

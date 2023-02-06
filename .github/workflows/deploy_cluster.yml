@@ -55,6 +55,7 @@ jobs:
          run: |
            kcli -C $CLIENT delete plan --yes $CLUSTER || true
            [ -d billi ] && rm -rf billi
+           kcli -C $CLIENT delete --yes iso $CLUSTER.iso || true
 
     deploy-kcli-plan:
       needs: requirements

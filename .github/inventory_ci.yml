@@ -1,7 +1,7 @@
 all:
   vars:
     pull_secret: /root/openshift_pull.json
-    iso_url: http://192.168.122.1/agent.x86_64.iso
+    iso_url: http://192.168.122.1/billi.iso
     dns_resolver:
     - 192.168.128.1
     hosts:

@@ -29,6 +29,7 @@ jobs:
          run: |
            kcli -C $CLIENT delete plan --yes $CLUSTER || true
            [ -d billi ] && rm -rf billi
+           kcli -C $CLIENT delete iso --yes $CLUSTER.iso || true
 
     deploy-kcli-plan:
       needs: requirements
@@ -46,3 +47,11 @@ jobs:
         run: |
           grep -q "^192.168.128.253 api.billi.karmalabs.corp" /etc/hosts || echo 192.168.128.253 api.billi.karmalabs.corp >> /etc/hosts
           ansible-playbook -i $INVENTORY run.yml
+
+    clean-up:
+      needs: deploy-billi-cluster
+      runs-on: libvirt
+      steps:
+      - name: Clean everything after success
+        run: |
+          kcli -c $CLIENT delete plan --yes $CLUSTER
