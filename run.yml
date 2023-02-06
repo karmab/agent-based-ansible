@@ -77,6 +77,9 @@
     ansible.builtin.file:
       path: billi/agent-config.yaml
       state: absent
+  - name: Wait for bootstrap to complete
+    ansible.builtin.command:
+      cmd: ./openshift-install wait-for bootstrap-complete --dir billi --log-level debug
   - name: Wait for install to complete
     ansible.builtin.command:
       cmd: ./openshift-install wait-for install-complete --dir billi --log-level debug
