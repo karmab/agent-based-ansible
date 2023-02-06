@@ -28,6 +28,7 @@ jobs:
          continue-on-error: true
          run: |
            kcli -C $CLIENT delete plan --yes $CLUSTER || true
+           [ -d billi ] && rm -rf billi
 
     deploy-kcli-plan:
       needs: requirements
