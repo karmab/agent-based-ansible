@@ -38,7 +38,7 @@
     when: '"manifests" is directory'
   - name: Grab openshift-client from internet
     ansible.builtin.unarchive:
-      src: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{ tag }}/openshift-client-linux.tar.gz"
+      src: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz"
       dest: "."
       remote_src: true
       creates: oc
