@@ -36,6 +36,12 @@
       src: manifests
       dest: billi
     when: '"manifests" is directory'
+  - name: Grab openshift-client from internet
+    ansible.builtin.unarchive:
+      src: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{ tag }}/openshift-client-linux.tar.gz"
+      dest: "."
+      remote_src: true
+      creates: oc
   - name: Template get_installer.sh.j2
     template:
       src: get_installer.sh.j2
@@ -49,7 +55,7 @@
     when: disconnected_url is not defined
   - name: Grab openshift-install from disconnected registry
     ansible.builtin.command:
-      cmd: oc adm release extract --registry-config {{ pull_secret|default('openshift_pull.json') }} --command=openshift-install --to . {{ disconnected_url }}/{{ disconnected_prefix|default('ocp4') }}:{{ version|default('4.12-x86_64') }} --insecure
+      cmd: ./oc adm release extract --registry-config {{ pull_secret|default('openshift_pull.json') }} --command=openshift-install --to . {{ disconnected_url }}/{{ disconnected_prefix|default('ocp4') }}:{{ version|default('4.12-x86_64') }} --insecure
       creates: openshift-install
     when: disconnected_url is defined
   - name: Generate iso

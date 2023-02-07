@@ -15,4 +15,4 @@ export OPENSHIFT_RELEASE_IMAGE={{ openshift_image or "registry.ci.openshift.org/
 {% elif version == 'nightly' %}
 export OPENSHIFT_RELEASE_IMAGE=$(curl -s https://amd64.ocp.releases.ci.openshift.org/api/v1/releasestream/{{ tag|string }}.0-0.nightly/latest | jq -r .pullSpec)
 {% endif %}
-oc adm release extract --registry-config $PULL_SECRET --command=openshift-install --to . $OPENSHIFT_RELEASE_IMAGE
+./oc adm release extract --registry-config $PULL_SECRET --command=openshift-install --to . $OPENSHIFT_RELEASE_IMAGE
