@@ -96,3 +96,12 @@
     register: installresult
     until: installresult is not failed
     retries: 2
+  - name: Template install_operators.sh.j2
+    template:
+      src: install_operators.sh.j2
+      dest: install_operators.sh
+    when: operators is defined and operators|length>0
+  - name: Install operators
+    ansible.builtin.command:
+      cmd: bash install_operators.sh
+    when: operators is defined and operators|length>0

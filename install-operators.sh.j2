@@ -1,0 +1,6 @@
+export KUBECONFIG=billi/auth/kubeconfig
+curl -s -L https://github.com/karmab/tasty/releases/download/v0.6.0/tasty-linux-amd64 > tasty
+chmod u+x tasty
+{% for operator in operators %}
+./tasty install {{ operators }} -w
+{% endfor %}

@@ -11,6 +11,9 @@ on:
         description: 'Cluster Name'
         required: true
         default: billi
+      EXTRAPARAMS:
+        description: 'Extra params'
+        default: ""
       PULLSECRET:
         description: 'Pull Secret'
         required: true
@@ -33,6 +36,7 @@ env:
  PYTHONUNBUFFERED: true
  CLIENT: ${{github.event.inputs.CLIENT}}
  CLUSTER: ${{github.event.inputs.CLUSTER}}
+ EXTRAPARAMS: ${{github.event.inputs.EXTRAPARAMS}}
  PULLSECRET: ${{github.event.inputs.PULLSECRET}}
  INVENTORY: ${{github.event.inputs.INVENTORY}}
  VERSION: ${{github.event.inputs.VERSION}}
@@ -72,4 +76,4 @@ jobs:
       - name: Deploy billi cluster
         run: |
           grep -q "^192.168.128.253 api.billi.karmalabs.corp" /etc/hosts || echo 192.168.128.253 api.billi.karmalabs.corp >> /etc/hosts
-          ansible-playbook -i $INVENTORY run.yml -e version=$VERSION -e tag=$TAG
+          ansible-playbook -i $INVENTORY run.yml -e version=$VERSION -e tag=$TAG $EXTRAPARAMS

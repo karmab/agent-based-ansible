@@ -31,6 +31,7 @@ Code to launch nodes using redfish is included
 |machine_networks    |[]                  |
 |version             |stable              |
 |tag                 |4.12                |
+|operators           |[]                  |
 
 ## Emulating baremetal hosts with kcli
 
