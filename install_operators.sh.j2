@@ -1,0 +1,8 @@
+export KUBECONFIG={{ cluster }}/auth/kubeconfig
+if [ ! -f tasty ] ; then
+  curl -s -L https://github.com/karmab/tasty/releases/download/v0.6.0/tasty-linux-amd64 > tasty
+  chmod u+x tasty
+fi
+{% for operator in operators.split(',')|list %}
+./tasty install {{ operator }} -w
+{% endfor %}

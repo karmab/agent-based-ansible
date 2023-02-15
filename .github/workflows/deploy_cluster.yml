@@ -10,7 +10,7 @@ on:
       CLUSTER:
         description: 'Cluster Name'
         required: true
-        default: billi
+        default: agent-based
       EXTRAPARAMS:
         description: 'Extra params'
         default: ""
@@ -58,7 +58,7 @@ jobs:
          continue-on-error: true
          run: |
            kcli -C $CLIENT delete plan --yes $CLUSTER || true
-           [ -d billi ] && rm -rf billi
+           [ -d agent-based ] && rm -rf agent-based
            kcli -C $CLIENT delete --yes iso $CLUSTER.iso || true
 
     deploy-kcli-plan:
@@ -69,11 +69,11 @@ jobs:
         run: |
           kcli -C $CLIENT create plan $CLUSTER
 
-    deploy-billi-cluster:
+    deploy-agent-based-cluster:
       needs: deploy-kcli-plan
       runs-on: libvirt
       steps:
-      - name: Deploy billi cluster
+      - name: Deploy agent-based cluster
         run: |
-          grep -q "^192.168.128.253 api.billi.karmalabs.corp" /etc/hosts || echo 192.168.128.253 api.billi.karmalabs.corp >> /etc/hosts
+          grep -q "^192.168.128.253 api.$CLUSTER.karmalabs.corp" /etc/hosts || echo 192.168.128.253 api.$CLUSTER.karmalabs.corp >> /etc/hosts
           ansible-playbook -i $INVENTORY run.yml -e version=$VERSION -e tag=$TAG $EXTRAPARAMS

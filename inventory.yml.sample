@@ -1,6 +1,6 @@
 all:
   vars:
-    iso_url: http://192.168.122.1/billi.iso
+    iso_url: http://192.168.122.1/agent-based.iso
     dns_resolver:
       - 192.168.128.1
     hosts:
@@ -12,7 +12,7 @@ all:
 #        netmask: 64
 #        gateway: 2620:52:0:1303::1
       mac: cc:aa:aa:aa:dd:01
-      bmc_url: http://192.168.122.1:9000/redfish/v1/Systems/local/billi-node-0
+      bmc_url: http://192.168.122.1:9000/redfish/v1/Systems/local/agent-based-node-0
 #     disk: vdd
     - addresses:
       - ip: 192.168.128.12
@@ -22,7 +22,7 @@ all:
 #        netmask: 64
 #        gateway: 2620:52:0:1303::1
       mac: cc:aa:aa:aa:dd:02
-      bmc_url: http://192.168.122.1:9000/redfish/v1/Systems/local/billi-node-1
+      bmc_url: http://192.168.122.1:9000/redfish/v1/Systems/local/agent-based-node-1
     - addresses:
       - ip: 192.168.128.13
         netmask: 24
@@ -31,8 +31,8 @@ all:
 #        netmask: 64
 #        gateway: 2620:52:0:1303::1
       mac: cc:aa:aa:aa:dd:03
-      bmc_url: http://192.168.122.1:9000/redfish/v1/Systems/local/billi-node-2
-    cluster: billi
+      bmc_url: http://192.168.122.1:9000/redfish/v1/Systems/local/agent-based-node-2
+    cluster: agent-based
     domain: karmalabs.corp
     ctlplanes: 3
     workers: 0

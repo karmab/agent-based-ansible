@@ -40,5 +40,5 @@ A [kcli plan](kcli_plan.yml) is provided to create 3 vms with specific uuid and 
 The plan can be run with
 
 ```
-kcli create plan billi
+kcli create plan agent-based
 ```

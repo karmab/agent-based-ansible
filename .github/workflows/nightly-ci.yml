@@ -8,9 +8,10 @@ env:
  HOME: /root
  PYTHONUNBUFFERED: true
  CLIENT: local
- CLUSTER: billi
+ CLUSTER: agent-based
  PULLSECRET: /root/openshift_pull.json
  INVENTORY: .github/inventory_ci.yml
+ EXTRAPARAMS: "-e operators=kubevirt-hyperconverged,metallb-operator"
 
 jobs:
     requirements:
@@ -28,7 +29,7 @@ jobs:
          continue-on-error: true
          run: |
            kcli -C $CLIENT delete plan --yes $CLUSTER || true
-           [ -d billi ] && rm -rf billi
+           [ -d $CLUSTER ] && rm -rf $CLUSTER
            kcli -C $CLIENT delete iso --yes $CLUSTER.iso || true
 
     deploy-kcli-plan:
@@ -39,19 +40,21 @@ jobs:
         run: |
           kcli -C $CLIENT create plan $CLUSTER
 
-    deploy-billi-cluster:
+    deploy-agent-based-cluster:
       needs: deploy-kcli-plan
       runs-on: libvirt
       steps:
-      - name: Deploy billi cluster
+      - name: Deploy agent based cluster
         run: |
-          grep -q "^192.168.128.253 api.billi.karmalabs.corp" /etc/hosts || echo 192.168.128.253 api.billi.karmalabs.corp >> /etc/hosts
-          ansible-playbook -i $INVENTORY run.yml
+          grep -q "^192.168.128.253 api.$CLUSTER.karmalabs.corp" /etc/hosts || echo 192.168.128.253 api.$CLUSTER.karmalabs.corp >> /etc/hosts
+          ansible-playbook -i $INVENTORY run.yml $EXTRAPARAMS
 
     clean-up:
-      needs: deploy-billi-cluster
+      needs: deploy-agent-based-cluster
       runs-on: libvirt
       steps:
       - name: Clean everything after success
         run: |
-          kcli -c $CLIENT delete plan --yes $CLUSTER
+          kcli -C $CLIENT delete plan --yes $CLUSTER
+          [ -d $CLUSTER ] && rm -rf $CLUSTER
+          kcli -C $CLIENT delete iso --yes $CLUSTER.iso || true

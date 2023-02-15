@@ -20,21 +20,21 @@
     when: disconnected_url is defined and ca is not defined
   - name: Create Billi directory to hold assets
     ansible.builtin.file:
-      path: billi
+      path: "{{ cluster }}"
       state: directory
       mode: '0755'
   - name: Render install config
     ansible.builtin.template:
       src: install-config.yaml.j2
-      dest: billi/install-config.yaml
+      dest: "{{ cluster }}/install-config.yaml"
   - name: Render agent config
     ansible.builtin.template:
       src: agent-config.yaml.j2
-      dest: billi/agent-config.yaml
+      dest: "{{ cluster }}/agent-config.yaml"
   - name: Copy manifests
     copy:
       src: manifests
-      dest: billi
+      dest: "{{ cluster }}"
     when: '"manifests" is directory'
   - name: Grab openshift-client from internet
     ansible.builtin.unarchive:
@@ -55,24 +55,24 @@
     when: disconnected_url is not defined
   - name: Grab openshift-install from disconnected registry
     ansible.builtin.command:
-      cmd: ./oc adm release extract --registry-config {{ pull_secret|default('openshift_pull.json') }} --command=openshift-install --to . {{ disconnected_url }}/{{ disconnected_prefix|default('ocp4') }}:{{ version|default('4.12-x86_64') }} --insecure
+      cmd: "./oc adm release extract --registry-config {{ pull_secret|default('openshift_pull.json') }} --command=openshift-install --to . {{ disconnected_url }}/{{ disconnected_prefix|default('ocp4') }}:{{ version|default('4.12-x86_64') }} --insecure"
       creates: openshift-install
     when: disconnected_url is defined
   - name: Generate iso
     ansible.builtin.command:
-      cmd: ./openshift-install agent create image --dir billi --log-level debug
-      creates: billi/agent.x86_64.iso
+      cmd: "./openshift-install agent create image --dir {{ cluster }} --log-level debug"
+      creates: "{{ cluster }}/agent.x86_64.iso"
   - name: Remove old agent iso
     ansible.builtin.file:
-      path: /var/www/html/{{ cluster }}.iso
+      path: "/var/www/html/{{ cluster }}.iso"
       state: absent
   - name: Copy agent iso to /var/www/html
     become: yes
-    command: cp billi/agent.x86_64.iso /var/www/html/{{ cluster }}.iso
+    command: "cp {{ cluster }}/agent.x86_64.iso /var/www/html/{{ cluster }}.iso"
   - name: Make agent iso available
     become: yes
     file:
-      path: /var/www/html/{{ cluster }}.iso
+      path: "/var/www/html/{{ cluster }}.iso"
       owner: apache
       group: apache
   - name: Boot hosts with iso
@@ -80,19 +80,19 @@
       cmd: "{{ playbook_dir }}/boot.py {{ ansible_inventory_sources[0] }}"
   - name: Remove agent iso
     ansible.builtin.file:
-      path: billi/agent.x86_64.iso
+      path: "{{ cluster }}/agent.x86_64.iso"
       state: absent
   - name: Remove install-config.yaml
     ansible.builtin.file:
-      path: billi/install-config.yaml
+      path: "{{ cluster }}/install-config.yaml"
       state: absent
   - name: Remove agent-config.yaml
     ansible.builtin.file:
-      path: billi/agent-config.yaml
+      path: "{{ cluster }}/agent-config.yaml"
       state: absent
   - name: Wait for install to complete
     ansible.builtin.command:
-      cmd: ./openshift-install wait-for install-complete --dir billi --log-level debug
+      cmd: "./openshift-install wait-for install-complete --dir {{ cluster }} --log-level debug"
     register: installresult
     until: installresult is not failed
     retries: 2

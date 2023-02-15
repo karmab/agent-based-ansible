@@ -1,13 +1,13 @@
 parameters:
- cluster: billi
+ cluster: agent-based
  nodes: 3
- network: billi
+ network: agent-based
  memory: 20480
  numcpus: 16
  disk_size: 200
  cidr: 192.168.128.0/24
 
-billi:
+{{ network }}:
  type: network
  cidr: {{ cidr }}
  dhcp: false
