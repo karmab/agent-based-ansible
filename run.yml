@@ -33,9 +33,9 @@
       dest: "{{ cluster }}/agent-config.yaml"
   - name: Copy manifests
     copy:
-      src: manifests
+      src: "{{ manifests }}"
       dest: "{{ cluster }}"
-    when: '"manifests" is directory'
+    when: '"{{ manifests }}" is directory'
   - name: Grab openshift-client from internet
     ansible.builtin.unarchive:
       src: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz"
