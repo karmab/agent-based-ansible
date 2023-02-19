@@ -35,7 +35,7 @@
     copy:
       src: "{{ manifests }}"
       dest: "{{ cluster }}"
-    when: '"{{ manifests }}" is directory'
+    when: manifests is directory
   - name: Grab openshift-client from internet
     ansible.builtin.unarchive:
       src: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz"
@@ -105,3 +105,7 @@
     ansible.builtin.command:
       cmd: bash install_operators.sh
     when: operators is defined and operators|length>0
+  - name: Execute extra manifests
+    ansible.builtin.command:
+      cmd: "oc create -f {{ extra_manifests }}"
+    when: extra_manifests is directory

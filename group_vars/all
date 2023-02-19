@@ -2,3 +2,4 @@ version: stable
 tag: 4.12
 openshift_image:
 manifests: manifests
+extra_manifests: extra_manifests
