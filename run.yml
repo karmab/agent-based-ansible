@@ -31,6 +31,24 @@
     ansible.builtin.template:
       src: agent-config.yaml.j2
       dest: "{{ cluster }}/agent-config.yaml"
+  - name: Create manifest for workload partitioning
+    block:
+    - name: Create manifest directory
+      ansible.builtin.file:
+       path: "{{ manifests }}"
+       state: directory
+       mode: '0755'
+    - name: Evaluate partitioning_data
+      set_fact:
+       partitioning_data: "{{ lookup('template', 'workload-partitioning/01-workload-partitioning.j2') }}"
+    - name: Evaluate pinning_data
+      set_fact:
+       pinning_data: "{{ lookup('template', 'workload-partitioning/openshift-workload-pinning.j2') }}"
+    - name: Render sno-workload-partitioning.yml
+      ansible.builtin.template:
+        src: workload-partitioning/sno-workload-partitioning.yml.j2
+        dest: "{{ manifests }}/sno-workload-partitioning.yml"
+    when: sno_cpuset is defined
   - name: Copy manifests
     copy:
       src: "{{ manifests }}"

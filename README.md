@@ -26,6 +26,7 @@ Code to launch nodes using redfish is included
 |ca                  |None                |
 |ipv6                |False               |
 |sno                 |False               |
+|sno_cpuset          |None                |
 |api_vip             |None                |
 |ingress_vip         |None                |
 |machine_networks    |[]                  |
