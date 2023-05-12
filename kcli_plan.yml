@@ -12,6 +12,12 @@ parameters:
  cidr: {{ cidr }}
  dhcp: false
 
+{% if network_type|default('OVNKubernetes') == 'Contrail' %}
+contrail-ctl:
+  type: network
+  cidr: 10.40.1.0/24
+{% endif %}
+
 {% for num in range(0,nodes) %}
 {{ cluster }}-node-{{ num }}:
  memory: {{ memory }}
@@ -24,4 +30,7 @@ parameters:
  nets:
  - name: {{ network }}
    mac: cc:aa:aa:aa:dd:{{ 1 + num }}
+{% if network_type|default('OVNKubernetes') == 'Contrail' %}
+ - contrail-ctl
+{% endif %}
 {% endfor %}

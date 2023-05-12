@@ -11,6 +11,10 @@ on:
         description: 'Cluster Name'
         required: true
         default: agent-based
+      NETWORK_TYPE:
+        description: 'Network Type'
+        required: true
+        default: OVNKubernetes
       EXTRAPARAMS:
         description: 'Extra params'
         default: ""
@@ -36,6 +40,7 @@ env:
  PYTHONUNBUFFERED: true
  CLIENT: ${{github.event.inputs.CLIENT}}
  CLUSTER: ${{github.event.inputs.CLUSTER}}
+ NETWORK_TYPE: ${{github.event.inputs.NETWORK_TYPE}}
  EXTRAPARAMS: ${{github.event.inputs.EXTRAPARAMS}}
  PULLSECRET: ${{github.event.inputs.PULLSECRET}}
  INVENTORY: ${{github.event.inputs.INVENTORY}}
@@ -67,7 +72,7 @@ jobs:
       steps:
       - name: Deploy kcli plan
         run: |
-          kcli -C $CLIENT create plan $CLUSTER
+          kcli -C $CLIENT create plan -P network_type=$NETWORK_TYPE $CLUSTER
 
     deploy-agent-based-cluster:
       needs: deploy-kcli-plan
@@ -76,4 +81,4 @@ jobs:
       - name: Deploy agent-based cluster
         run: |
           grep -q "^192.168.128.253 api.$CLUSTER.karmalabs.corp" /etc/hosts || echo 192.168.128.253 api.$CLUSTER.karmalabs.corp >> /etc/hosts
-          ansible-playbook -i $INVENTORY run.yml -e version=$VERSION -e tag=$TAG $EXTRAPARAMS
+          ansible-playbook -i $INVENTORY run.yml -e version=$VERSION -e tag=$TAG -e network_type=$NETWORK_TYPE $EXTRAPARAMS
