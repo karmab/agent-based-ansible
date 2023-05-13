@@ -49,6 +49,24 @@
         src: workload-partitioning/sno-workload-partitioning.yml.j2
         dest: "{{ manifests }}/sno-workload-partitioning.yml"
     when: sno_cpuset is defined
+  - name: Create Contrail manifests
+    block:
+    - name: Create manifest directory
+      ansible.builtin.file:
+       path: "{{ manifests }}"
+       state: directory
+       mode: '0755'
+    - name: Set ignition_config_overrides
+      set_fact:
+        ignition_config_override: "{\"ignition\":{\"version\":\"3.1.0\"},\"systemd\":{\"units\":[{\"name\":\"ca-patch.service\",\"enabled\":true,\"contents\":\"[Service]\\nType=oneshot\\nExecStart=/usr/local/bin/ca-patch.sh\\n\\n[Install]\\nWantedBy=multi-user.target\"}]},\"storage\":{\"files\":[{\"path\":\"/usr/local/bin/ca-patch.sh\",\"mode\":720,\"contents\":{\"source\":\"data:text/plain;charset=utf-8;base64,IyEvYmluL2Jhc2gKc3VjY2Vzcz0wCnVudGlsIFsgJHN1Y2Nlc3MgLWd0IDEgXTsgZG8KICB0bXA9JChta3RlbXApCiAgY2F0IDw8RU9GPiR7dG1wfSB8fCB0cnVlCmRhdGE6CiAgcmVxdWVzdGhlYWRlci1jbGllbnQtY2EtZmlsZTogfAokKHdoaWxlIElGUz0gcmVhZCAtYSBsaW5lOyBkbyBlY2hvICIgICAgJGxpbmUiOyBkb25lIDwgPChjYXQgL2V0Yy9rdWJlcm5ldGVzL2Jvb3RzdHJhcC1zZWNyZXRzL2FnZ3JlZ2F0b3ItY2EuY3J0KSkKRU9GCiAgS1VCRUNPTkZJRz0vZXRjL2t1YmVybmV0ZXMvYm9vdHN0cmFwLXNlY3JldHMva3ViZWNvbmZpZyBrdWJlY3RsIC1uIGt1YmUtc3lzdGVtIHBhdGNoIGNvbmZpZ21hcCBleHRlbnNpb24tYXBpc2VydmVyLWF1dGhlbnRpY2F0aW9uIC0tcGF0Y2gtZmlsZSAke3RtcH0KICBpZiBbWyAkPyAtZXEgMCBdXTsgdGhlbgoJcm0gJHt0bXB9CglzdWNjZXNzPTIKICBmaQogIHJtICR7dG1wfQogIHNsZWVwIDYwCmRvbmUK\"}}]},\"kernelArguments\":{\"shouldExist\":[\"ipv6.disable=1\"]}}"
+    - name: Template contrail script
+      template:
+        src: contrail.sh.j2
+        dest: contrail.sh
+    - name: Run Contrail script
+      ansible.builtin.command:
+        cmd: bash contrail.sh
+    when: network_type == 'Contrail'
   - name: Copy manifests
     copy:
       src: "{{ manifests }}"
@@ -80,6 +98,16 @@
     ansible.builtin.command:
       cmd: "./openshift-install agent create image --dir {{ cluster }} --log-level debug"
       creates: "{{ cluster }}/agent.x86_64.iso"
+  - name: Patch iso
+    block:
+    - name: Template Patch iso script
+      template:
+        src: patch_iso.sh.j2
+        dest: patch_iso.sh
+    - name: Run Patch iso script
+      ansible.builtin.command:
+        cmd: bash patch_iso.sh
+    when: ignition_config_override is defined
   - name: Remove old agent iso
     ansible.builtin.file:
       path: "/var/www/html/{{ cluster }}.iso"

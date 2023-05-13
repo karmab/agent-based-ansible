@@ -41,7 +41,7 @@ networking:
 {% for network in machine_networks %}
   - cidr: {{ network }}
 {% endfor %}
-  networkType: OVNKubernetes
+  networkType: {{ network_type|default("OVNKubernetes") }}
   serviceNetwork:
 {% for network in service_networks %}
   - {{ network }}

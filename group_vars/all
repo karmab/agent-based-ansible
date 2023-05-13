@@ -1,5 +1,6 @@
 version: stable
 tag: 4.12
+network_type: OVNKubernetes
 openshift_image:
 manifests: manifests
 extra_manifests: extra_manifests

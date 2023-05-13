@@ -1,0 +1,13 @@
+ISO="{{ cluster }}/agent.x86_64.iso"
+
+if [ "$(which coreos-installer)" == "" ] ; then
+  curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/coreos-installer/latest/coreos-installer
+  chmod 700 coreos-installer
+fi
+
+export PATH=.:$PATH
+
+coreos-installer iso ignition show $ISO > iso.ign
+echo '{{ ignition_config_override }}' > ignition_override.ign
+./ignitionmerger.py -c iso.ign ignition_override.ign > new.ign
+coreos-installer iso ignition embed -fi new.ign $ISO
