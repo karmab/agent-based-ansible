@@ -67,10 +67,16 @@
       ansible.builtin.command:
         cmd: bash contrail.sh
     when: network_type == 'Contrail'
+  - name: Create Billi directory to hold assets
+    ansible.builtin.file:
+      path: "{{ cluster }}/openshift"
+      state: directory
+      mode: '0755'
+    when: manifests is directory
   - name: Copy manifests
     copy:
-      src: "{{ manifests }}"
-      dest: "{{ cluster }}"
+      src: "{{ manifests }}/"
+      dest: "{{ cluster }}/openshift"
     when: manifests is directory
   - name: Grab openshift-client from internet
     ansible.builtin.unarchive:
