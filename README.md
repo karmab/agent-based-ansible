@@ -2,18 +2,18 @@
 
 This directory contains a playbook that can be used to deploy an Openshift Cluster using agent based workflow
 
-Code to launch nodes using redfish is included
+Code to boot the nodes using redfish is also available.
 
 ## Requisites
 
-- valid pull secret
-- ansible installed
-- bmc urls details of your target nodes
-- nmstatectl and python3-netaddr installed
+- Valid pull secret
+- Ansible installed
+- Bmc urls details of your target nodes
+- Nmstatectl and python3-netaddr installed
 
 ## How to use
 
-1. Prepare a valid inventory file (check the [sample one](inventory.sample) for reference). Give it a yml suffix
+1. Prepare a valid inventory file (check the [sample one](inventory.yml.sample) for reference). Give it a yml suffix
 2. Run `ansible-playbook -i inventory.yml run.yml`
 
 ## Relevant variables
@@ -38,7 +38,7 @@ Code to launch nodes using redfish is included
 
 ## Emulating baremetal hosts with kcli
 
-A [kcli plan](kcli_plan.yml) is provided to create 3 vms with specific uuid and  macaddress on a non dhcp libvirt network
+A [kcli plan](kcli_plan.yml) is provided to create 3 vms with specific macaddresses on a non dhcp libvirt network
 
 The plan can be run with
 
