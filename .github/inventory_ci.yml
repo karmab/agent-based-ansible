@@ -26,6 +26,20 @@ all:
       mac: cc:aa:aa:aa:dd:03
       nic: enp1s0
       bmc_url: http://192.168.122.1:9000/redfish/v1/Systems/local/agent-based-node-2
+    - addresses:
+      - ip: 192.168.128.14
+        netmask: 24
+        gateway: 192.168.128.1
+      mac: cc:aa:aa:aa:dd:04
+      nic: enp1s0
+      bmc_url: http://192.168.122.1:9000/redfish/v1/Systems/local/agent-based-node-3
+    - addresses:
+      - ip: 192.168.128.15
+        netmask: 24
+        gateway: 192.168.128.1
+      mac: cc:aa:aa:aa:dd:05
+      nic: enp1s0
+      bmc_url: http://192.168.122.1:9000/redfish/v1/Systems/local/agent-based-node-4
     cluster: agent-based
     domain: karmalabs.corp
     ctlplanes: 3

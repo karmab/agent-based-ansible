@@ -23,6 +23,14 @@
       path: "{{ cluster }}"
       state: directory
       mode: '0755'
+  - name: Strip extra hosts
+    set_fact:
+      hosts={{ hosts[:nodes|int] }}
+    when: nodes is defined and nodes|int < hosts|length
+  - name: Force sno when nodes is set to 1
+    set_fact: 
+      sno=True
+    when: nodes is defined and nodes|int == 1
   - name: Render install config
     ansible.builtin.template:
       src: install-config.yaml.j2
@@ -100,6 +108,9 @@
       cmd: "./oc adm release extract --registry-config {{ pull_secret|default('openshift_pull.json') }} --command=openshift-install --to . {{ disconnected_url }}/{{ disconnected_prefix|default('ocp4') }}:{{ version|default('4.12-x86_64') }} --insecure"
       creates: openshift-install
     when: disconnected_url is defined
+  - name: Generate manifests
+    ansible.builtin.command:
+      cmd: "./openshift-install agent create cluster-manifests --dir {{ cluster }}"
   - name: Generate iso
     ansible.builtin.command:
       cmd: "./openshift-install agent create image --dir {{ cluster }} --log-level debug"
@@ -129,7 +140,7 @@
       group: apache
   - name: Boot hosts with iso
     ansible.builtin.command:
-      cmd: "{{ playbook_dir }}/boot.py {{ ansible_inventory_sources[0] }}"
+      cmd: "{{ playbook_dir }}/boot.py {{ ansible_inventory_sources[0] }} {{ nodes|default(3) }}"
   - name: Remove agent iso
     ansible.builtin.file:
       path: "{{ cluster }}/agent.x86_64.iso"

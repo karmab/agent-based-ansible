@@ -15,9 +15,10 @@ on:
         description: 'Network Type'
         required: true
         default: OVNKubernetes
-      EXTRAPARAMS:
-        description: 'Extra params'
-        default: ""
+      NODES:
+        description: 'Number of nodes'
+        required: true
+        default: 3
       PULLSECRET:
         description: 'Pull Secret'
         required: true
@@ -41,7 +42,7 @@ env:
  CLIENT: ${{github.event.inputs.CLIENT}}
  CLUSTER: ${{github.event.inputs.CLUSTER}}
  NETWORK_TYPE: ${{github.event.inputs.NETWORK_TYPE}}
- EXTRAPARAMS: ${{github.event.inputs.EXTRAPARAMS}}
+ NODES: ${{github.event.inputs.NODES}}
  PULLSECRET: ${{github.event.inputs.PULLSECRET}}
  INVENTORY: ${{github.event.inputs.INVENTORY}}
  VERSION: ${{github.event.inputs.VERSION}}
@@ -72,7 +73,7 @@ jobs:
       steps:
       - name: Deploy kcli plan
         run: |
-          kcli -C $CLIENT create plan -P network_type=$NETWORK_TYPE $CLUSTER
+          kcli -C $CLIENT create plan -P network_type=$NETWORK_TYPE -P nodes=$NODES $CLUSTER
 
     deploy-agent-based-cluster:
       needs: deploy-kcli-plan
@@ -81,4 +82,4 @@ jobs:
       - name: Deploy agent-based cluster
         run: |
           grep -q "^192.168.128.253 api.$CLUSTER.karmalabs.corp" /etc/hosts || echo 192.168.128.253 api.$CLUSTER.karmalabs.corp >> /etc/hosts
-          ansible-playbook -i $INVENTORY run.yml -e version=$VERSION -e tag=$TAG -e network_type=$NETWORK_TYPE $EXTRAPARAMS
+          ansible-playbook -i $INVENTORY run.yml -e version=$VERSION -e tag=$TAG -e network_type=$NETWORK_TYPE -e nodes=$NODES

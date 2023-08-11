@@ -11,7 +11,7 @@ env:
  CLUSTER: agent-based
  PULLSECRET: /root/openshift_pull.json
  INVENTORY: .github/inventory_ci.yml
- EXTRAPARAMS: "-e operators=kubevirt-hyperconverged,metallb-operator"
+ EXTRA_ANSIBLE_PARAMS: "-e operators=kubevirt-hyperconverged,metallb-operator -e nodes=3"
 
 jobs:
     requirements:
@@ -47,7 +47,7 @@ jobs:
       - name: Deploy agent based cluster
         run: |
           grep -q "^192.168.128.253 api.$CLUSTER.karmalabs.corp" /etc/hosts || echo 192.168.128.253 api.$CLUSTER.karmalabs.corp >> /etc/hosts
-          ansible-playbook -i $INVENTORY run.yml $EXTRAPARAMS
+          ansible-playbook -i $INVENTORY run.yml $EXTRA_ANSIBLE_PARAMS
 
     clean-up:
       needs: deploy-agent-based-cluster
