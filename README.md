@@ -9,7 +9,7 @@ Code to boot the nodes using redfish is also available.
 - Valid pull secret
 - Ansible installed
 - Bmc urls details of your target nodes
-- Nmstatectl and python3-netaddr installed
+- Nmstatectl installed
 
 ## How to use
 

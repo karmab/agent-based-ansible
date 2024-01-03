@@ -1,5 +1,7 @@
 all:
   vars:
+    machine_networks:
+    - 192.168.128.0/24
     pull_secret: /root/openshift_pull.json
     iso_url: http://192.168.122.1/agent-based.iso
     dns_resolver:

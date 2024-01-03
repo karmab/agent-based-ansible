@@ -3,6 +3,9 @@ all:
     iso_url: http://192.168.122.1/agent-based.iso
     dns_resolver:
       - 192.168.128.1
+    machine_networks:
+    - 192.168.128.0/24
+#   - 2620:52:0:1302::/64       
     hosts:
     - addresses:
       - ip: 192.168.128.11
