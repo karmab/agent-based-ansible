@@ -1,3 +1,6 @@
+| :warning: The tool described in this repository is not supported in any way by Red Hat, nor widely used !!! |
+|-------------------------------------------------------------------------------------------------------------|
+
 # Deploying with agent based workflow through a playbook
 
 This directory contains a playbook that can be used to deploy an Openshift Cluster using agent based workflow
